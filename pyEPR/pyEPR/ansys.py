@@ -641,6 +641,9 @@ class HfssProject(COMWrapper):
     def new_q3d_design(self, name):
         return HfssDesign(self, self._project.InsertDesign("Q3D Extractor", name, "", ""))
 
+    def new_maxwell_design(self, name):
+        return HfssDesign(self, self._project.InsertDesign("Maxwell 3D", name, "", ""))
+
     def get_material_props(self, name):
         props=list(self._material_mgr.GetProperties(name))
         return props
@@ -748,7 +751,7 @@ class HfssDesign(COMWrapper):
         except Exception as e:
             logger.debug(
                 f'Exception occured at design.GetSolutionType() {e}. Assuming Q3D design')
-            self.solution_type = 'Q3D'
+            self.solution_type = 'Q3D' # needs to be modified to support Maxwell
 
         if design is None:
             return
@@ -801,10 +804,12 @@ class HfssDesign(COMWrapper):
 
         if self.solution_type == "Eigenmode":
             return HfssEMSetup(self, name)
-        elif self.solution_type == "DrivenModal":
+        elif self.solution_type == "DrivenModal" or "HFSS Hybrid Modal Network" or "Modal Network": #band-aid by Tom to account for new solution type names in later Ansys versions
             return HfssDMSetup(self, name)
         elif self.solution_type == "Q3D":
             return AnsysQ3DSetup(self, name)
+        elif self.solution_type == "Maxwell 3D":
+            return Maxwell3DSetup(self, name)
 
     def create_dm_setup(self, freq_ghz=1, name="Setup", max_delta_s=0.1, max_passes=10,
                         min_passes=1, min_converged=1, pct_refinement=30,
@@ -871,6 +876,44 @@ class HfssDesign(COMWrapper):
                       ])
 
         return AnsysQ3DSetup(self, name)
+
+    def create_maxwell3d_setup(self, name="Setup", min_passes=1, max_passes=10,
+                        min_converged=1, pct_refinement=30, pct_error=1,
+                        solve_field_only=False):
+        if self.solution_type!="Maxwell 3D":
+            if self.solution_type=="Q3D":
+                self.solution_type="Maxwell 3D"
+                raise Warning('Assuming that this is a Maxwell 3D design') #should clean this up re: Q3D etc.
+            else:
+                raise TypeError('Incorrect solution type: should be a Maxwell 3D design')
+        name:increment_name(name, self.get_setup_names())
+        self._setup_module.InsertSetup("Magnetostatic",
+                ["Name:"+name,
+                    "Enabled:="		, True,
+		[
+			"NAME:MeshLink",
+			"ImportMesh:="		, False
+            ],
+            "MaximumPasses:="	, max_passes,
+            "MinimumPasses:="	, min_passes,
+            "MinimumConvergedPasses:=", min_converged,
+            "PercentRefinement:="	, pct_refinement,
+            "SolveFieldOnly:="	, solve_field_only,
+            "PercentError:="	, pct_error,
+            "SolveMatrixAtLast:="	, True,
+            "UseNonLinearIterNum:="	, False,
+            "UseIterativeSolver:="	, False,
+            "RelativeResidual:="	, 1E-06,
+            "NonLinearResidual:="	, 0.001,
+            "SmoothBHCurve:="	, False,
+            [
+                "NAME:MuOption",
+                "MuNonLinearBH:="	, True
+                ]
+                ])
+        return Maxwell3DSetup(self, name)
+
+
 
     def delete_setup(self, name):
         if name in self.get_setup_names():
@@ -1200,6 +1243,7 @@ class HfssSetup(HfssPropertyObject):
 
     def insert_sweep(self, start_ghz, stop_ghz, count=None, step_ghz=None,
                      name="Sweep", type="Fast", save_fields=False):
+                     # removed the following: , generate_all_fields=False):
 
         if not type in ['Fast', 'Interpolating', 'Discrete']:
             logger.error(
@@ -1212,9 +1256,10 @@ class HfssSetup(HfssPropertyObject):
             "Type:=", type,
             "SaveFields:=", save_fields,
             "SaveRadFields:=", False,
-            # "GenerateFieldsForAllFreqs:="
             "ExtrapToDC:=", False,
         ]
+         #removed "GenerateFieldsForAllFreqs:=", generate_all_fields,
+
 
         # not sure hwen extacyl this changed between 2016 and 2019
         if self._ansys_version >= '2019':
@@ -1644,6 +1689,7 @@ class AnsysQ3DSetup(HfssSetup):
 
         return df_cmat, units, design_variation, df_cond, units_cond
 
+
     @staticmethod
     def load_q3d_matrix(path, user_units='fF'):
         """Load Q3D capcitance file exported as Maxwell matrix.
@@ -1668,6 +1714,61 @@ class AnsysQ3DSetup(HfssSetup):
         #print("Imported capacitance matrix with UNITS: [%s] now converted to USER UNITS:[%s] from file:\n\t%s"%(Cunits, user_units, path))
 
         return df_cmat, user_units, (df_cond, units_cond), design_variation
+
+
+class Maxwell3DSetup(HfssSetup):
+    """
+    Maxwell3DSetup
+    """
+    
+    def get_solutions(self):
+        return (self, self.parent._solutions)
+
+    def get_convergence(self, variation=""):
+        '''
+        Returns df
+                    # Triangle   Delta %
+            Pass
+            1            164       NaN
+        '''
+        return super().get_convergence(variation, pre_fn_args=[]) #pre_fn_args=['CG']) ?
+
+    def get_matrix(self, variation='', pass_number=0, frequency=None,
+                   MatrixType='Inductance',
+                   solution_kind='LastAdaptive',  # AdpativePass
+                   ACPlusDCResistance=False,
+                   soln_type="C"):
+        '''
+        Arguments:
+        -----------
+            variation : an empty string returns nominal variation.
+                        Otherwise need the list
+            frequency : in Hz
+            soln_type = "C", "AC RL" and "DC RL"
+            solution_kind = 'LastAdaptive' # AdaptivePass
+        Internals:
+        -----------
+            Uses self.solution_name  = Setup1 : LastAdaptive
+
+        Returns:
+        ---------------------
+            df_cmat, user_units, (df_cond, units_cond), design_variation
+        '''
+        # if frequency is None:
+        #     frequency = self.get_frequency_Hz()
+
+        temp = tempfile.NamedTemporaryFile()
+        temp.close()
+        path = temp.name+'.txt'
+        #Syntax:ExportSolnData <SetupName>, <SolutionName>, <IsPostProcessed>, <Variation>, <ExportFileName>
+        self.parent._design.ExportSolnData(self.name, "Matrix1",  ###note that "Matrix1" should be changed to a variable set by the user
+                                             False,"","MaxwellMatrix.txt")
+
+        df_cmat, user_units, (df_cond, units_cond), design_variation = \
+            self.load_q3d_matrix(path)
+        return df_cmat, user_units, (df_cond, units_cond), design_variation
+
+
 
 
 class HfssDesignSolutions(COMWrapper):
@@ -1773,6 +1874,35 @@ class HfssEMDesignSolutions(HfssDesignSolutions):
         #return []
     self._solutions.ExportEigenmodes(soln_name, ['Pass:=5'], fn) # ['Pass:=5'] fails  can do with ''
     """
+    
+    def eigenmodeQs(self, lv=""):
+        #self._solutions.ExportEigenmodes(self.parent.solution_name, "test", "eigentest")
+        fn = tempfile.mktemp()
+        #print(self.parent.solution_name, lv, fn)
+        self._solutions.ExportEigenmodes(self.parent.solution_name, lv, fn)
+        data = np.genfromtxt(fn, dtype='float') #was str
+        # Update to Py 3:
+        # np.loadtxt and np.genfromtxt operate in byte mode, which is the default string type in Python 2.
+        # But Python 3 uses unicode, and marks bytestrings with this b.
+        # getting around the very annoying fact that
+        if np.size(np.shape(data)) == 1:
+            # in Python a 1D array does not have shape (N,1)
+            data = np.array([data])
+        else:                                  # but rather (N,) ....
+            pass
+        if np.size(data[0, :]) == 6:  # checking if values for Q were saved
+            # eigvalue=(omega-i*kappa/2)/2pi
+            kappa_over_2pis = [2*float(ii) for ii in data[:, 3]]
+            # so kappa/2pi = 2*Im(eigvalue)
+            Qs = data[:,-1]
+        else:
+            kappa_over_2pis = None
+
+        # print(data[:,1])
+        freqs = [float(ii) for ii in data[:, 1]]
+        #return freqs, kappa_over_2pis
+        return Qs 
+        
 
     def set_mode(self, n, phase=0, FieldType='EigenStoredEnergy'):
         '''
@@ -1867,6 +1997,160 @@ class HfssEMDesignSolutions(HfssDesignSolutions):
                                      ["X Component:=", xcomp,
                                       "Y Component:=", ycomp], [])
 
+    
+    #def create_fields_report(self, plot_name, xcomp, ycomp, params, pass_name='LastAdaptive'):
+    #def get_field_strengths(self, plot_name, setup_name='Test_EM',  pass_name='LastAdaptive', line_name='Polyline1', numpts=100, xcomp='Distance', ycomp='Mag_E'):
+    def get_field_strengths(self, plot_name, setup_name='Test_EM',  pass_name='LastAdaptive', line_name='Polyline1', numpts=100, xcomp='Distance', ycomp='Mag_E',filename="FieldPlot"):
+        '''
+        pass_name: AdaptivePass, LastAdaptive
+
+        Example
+        ------------------------------------------------------
+        Exammple plot for a single vareiation all pass converge of mode freq
+        .. code-block python
+            ycomp = [f"re(Mode({i}))" for i in range(1,1+epr_hfss.n_modes)]
+            params = ["Pass:=", ["All"]]+variation
+            setup.create_report("Freq. vs. pass", "Pass", ycomp, params, pass_name='AdaptivePass')
+        '''
+        #assert isinstance(ycomp, list)
+#        assert isinstance(params, list)
+
+        setup = self.parent
+        reporter = setup._reporter
+        design = setup.parent._design
+        #self._design = design
+        #return reporter.CreateReport(plot_name, "Fields", "Rectangular Plot",
+        #                             f"{setup.name} : {pass_name}", [], params)#,
+        #                             #["X Component:=", xcomp,
+        #                              #"Y Component:=", ycomp], [])
+        '''reporter.CreateReport(plot_name, "Fields", "Rectangular Plot", setup_name + ' : ' + pass_name, 
+                [
+                    "Context:="		, line_name,
+                    "PointCount:="		, numpts
+                ], 
+                [
+                    "Distance:="		, ["All"],
+                    "Phase:="		, ["0deg"]
+                ], 
+                [
+                    "X Component:="		, xcomp,
+                    "Y Component:="		, [ycomp]
+                ])
+                '''     
+        oModule1 = design.GetModule("ReportSetup")
+        #oModule1.CreateReport(" Plot 111", "Fields", "Rectangular Plot", "Test_EM : LastAdaptive", 
+        oModule1.CreateReport(plot_name, "Fields", "Rectangular Plot", setup_name + ' : ' + pass_name, 
+            [
+                "Context:="		, line_name,#"Polyline1",
+                "PointCount:="		, numpts#101
+            ], 
+            [
+                "Distance:="		, ["All"],
+                "Phase:="		, ["0deg"]#,
+                #"Stock_L:="		, ["Nominal"],
+                #"Stock_W:="		, ["Nominal"],
+                #"Stock_H:="		, ["Nominal"]
+            ], 
+            [
+                "X Component:="		, xcomp,
+                "Y Component:="		, [ycomp]
+            ])
+        oModule1.ExportToFile(plot_name, filename+".csv", False)#"C:/Users/Tom/OneDrive - Rutgers University/Chakram Lab/Multimode Cavity/Simulation Files/"+filename".csv", False)
+
+        
+        
+        
+        
+        
+        '''
+        oModule1 = design.GetModule("FieldsReporter")#setup.parent.GetModule("FieldsReporter")
+        oModule1.CreateFieldPlot(
+            [
+                "NAME:"+plot_name,
+                "SolutionName:="	, setup_name + ' : ' + pass_name,#"Test_EM : LastAdaptive",
+                "UserSpecifyName:="	, 0,#0
+                "UserSpecifyFolder:="	, 0,
+                "QuantityName:="	, ycomp,#"Mag_E",
+                "PlotFolder:="		, "E Field",
+                "StreamlinePlot:="	, False,
+                "AdjacentSidePlot:="	, False,
+                "FullModelPlot:="	, False,
+                "IntrinsicVar:="	, "Phase=\'0deg\'",
+                "PlotGeomInfo:="	, [1,"Line",1,line_name],#"Polyline1"],
+                "FilterBoxes:="		, [1,""],
+                [
+                    "NAME:PlotOnLineSettings",
+                    [
+                        "NAME:LineSettingsID",
+                        "Width:="		, 4,
+                        "Style:="		, "Cylinder"
+                    ],
+                    "IsoValType:="		, "Tone",
+                    "ArrowUniform:="	, False,
+                    "NumofArrow:="		, 100,
+                    "Refinement:="		, 0
+                ],
+                "EnableGaussianSmoothing:=", False
+            ], "Field")
+        #oModule1 = design.GetModule("ReportSetup")#setup.parent.GetModule("ReportSetup")
+        #oModule1.ExportToFile(plot_name, plot_name + '.csv', False)#"C:/Users/Tom/OneDrive - Rutgers University/Chakram Lab/Multimode Cavity/Simulation Files/Plot 5.csv", False)
+'''
+#########################
+
+'''oModule.CreateReport(" Plot 2", "Fields", "Rectangular Plot", "Test_EM : LastAdaptive", 
+	[
+		"Context:="		, "Polyline1",
+		"PointCount:="		, 119
+	], 
+	[
+		"Distance:="		, ["All"],
+		"Phase:="		, ["0deg"],
+		"Stock_L:="		, ["Nominal"],
+		"Stock_W:="		, ["Nominal"],
+		"Stock_H:="		, ["Nominal"]
+	], 
+	[
+		"X Component:="		, "Distance",
+		"Y Component:="		, ["Mag_E"]
+	])'''
+
+'''
+oModule = oDesign.GetModule("FieldsReporter")
+oModule.CreateFieldPlot(
+	[
+		"NAME:Mag_E1",
+		"SolutionName:="	, "Test_EM : LastAdaptive",
+		"UserSpecifyName:="	, 0,
+		"UserSpecifyFolder:="	, 0,
+		"QuantityName:="	, "Mag_E",
+		"PlotFolder:="		, "E Field",
+		"StreamlinePlot:="	, False,
+		"AdjacentSidePlot:="	, False,
+		"FullModelPlot:="	, False,
+		"IntrinsicVar:="	, "Phase=\'0deg\'",
+		"PlotGeomInfo:="	, [1,"Line",1,"Polyline1"],
+		"FilterBoxes:="		, [1,""],
+		[
+			"NAME:PlotOnLineSettings",
+			[
+				"NAME:LineSettingsID",
+				"Width:="		, 4,
+				"Style:="		, "Cylinder"
+			],
+			"IsoValType:="		, "Tone",
+			"ArrowUniform:="	, False,
+			"NumofArrow:="		, 100,
+			"Refinement:="		, 0
+		],
+		"EnableGaussianSmoothing:=", False
+	], "Field")
+oModule = oDesign.GetModule("ReportSetup")
+oModule.ExportToFile(" Plot 5", "C:/Users/Tom/OneDrive - Rutgers University/Chakram Lab/Multimode Cavity/Simulation Files/Plot 5.csv", False)
+
+'''
+
+
+
 
 class HfssDMDesignSolutions(HfssDesignSolutions):
 
@@ -1876,6 +2160,8 @@ class HfssDMDesignSolutions(HfssDesignSolutions):
 class HfssQ3DDesignSolutions(HfssDesignSolutions):
     pass
 
+class MaxwellDesignSolutions(HfssDesignSolutions):
+    pass
 
 class HfssFrequencySweep(COMWrapper):
     prop_tab = "HfssTab"
@@ -2189,6 +2475,37 @@ class HfssModeler(COMWrapper):
                "Objects:=", objects,
                'MaxLength:=', max_length]
         ops = ['RefineInside', 'Enabled', 'RestrictElem',
+               'NumMaxElem', 'RestrictLength']
+        for key, val in kwargs.items():
+            if key in ops:
+                if type(val)==bool:
+                    arr += [key+':=', val]
+                else:
+                    arr += [key+':=', str(val)]
+            else:
+                logger.error('KEY `{key}` NOT IN ops!')
+
+        self._mesh.AssignLengthOp(arr)
+        
+        
+    def mesh_length_face(self, name_mesh, faces: list, max_length='0.1mm', **kwargs):
+        '''
+        "RefineInside:="	, False,
+        "Enabled:="		, True,
+        "RestrictElem:="	, False,
+        "NumMaxElem:="		, "1000",
+        "RestrictLength:="	, True,
+        "MaxLength:="		, "0.1mm"
+
+        Example use:
+        modeler.assign_mesh_length('mesh2', ["Q1_mesh"], MaxLength=0.1)
+        '''
+        assert isinstance(faces, list)
+
+        arr = [f"NAME:{name_mesh}",
+               "Faces:=", faces,
+               'MaxLength:=', max_length]
+        ops = ['Objects', 'RefineInside', 'Enabled', 'RestrictElem',
                'NumMaxElem', 'RestrictLength']
         for key, val in kwargs.items():
             if key in ops:
@@ -2515,6 +2832,52 @@ class HfssModeler(COMWrapper):
                 ]
         return self._boundaries.AssignNet(params)
 
+    #Q3D auto-nets, from Tom
+    def autoidentify_nets(self):
+        return self._boundaries.AutoIdentifyNets()
+
+    #Maxwell currents
+    def assign_current(self, obj, name='Current', current='0A',swap_direction=False):
+        if not isinstance(obj, list):
+            obj = [obj]
+        params=['NAME:'+name, 
+                'Objects:=', obj,
+                'Current:=', current,
+                "IsSolid:="	, True,
+		        "Point out of terminal:=", swap_direction
+                ]
+        return self._boundaries.AssignCurrent(params)        
+    
+    #Autoassign a Maxwell inductance matrix. "obj" must be a list of currents as strings
+    def autoassign_matrix(self, obj, name='Matrix'):
+        if not isinstance(obj, list):
+            obj = [obj]
+        params=["NAME:"+name,
+		[
+			"NAME:MatrixEntry",
+			[
+				"NAME:MatrixEntry",
+				"Source:="		, obj[0],
+				"NumberOfTurns:="	, "1"
+			],
+			[
+				"NAME:MatrixEntry",
+				"Source:="		, obj[1],
+				"NumberOfTurns:="	, "1"
+			],
+			[
+				"NAME:MatrixEntry",
+				"Source:="		, obj[2],
+				"NumberOfTurns:="	, "1"
+			]
+		    ],
+		    [
+			"NAME:MatrixGroup"
+            ]
+        ]
+        return self._boundaries.AssignMatrix(params)
+
+
 
     def assign_perfect_E(self, obj, face=None, name='PerfE'):
         '''
@@ -2689,7 +3052,7 @@ class HfssModeler(COMWrapper):
         try:
             return self._modeler.GetFaceByPosition(params)
         except:
-            print('No face found at position %.2s, %.2s, %.2s'%(str(x_pos), str(y_pos), str(z_pos)))
+            print('No face found at position %.5s, %.5s, %.5s'%(str(x_pos), str(y_pos), str(z_pos)))
             return None
 
     def get_edge_ids_by_face(self, face):

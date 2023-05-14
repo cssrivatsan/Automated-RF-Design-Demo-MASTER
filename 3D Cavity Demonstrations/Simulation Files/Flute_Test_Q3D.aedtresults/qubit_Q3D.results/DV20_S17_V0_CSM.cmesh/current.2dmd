@@ -9,14 +9,14 @@
    nbodies 5
    facet_face_map_size 49
    '<body>'
-      bodyid 275
+      bodyid 253
       bodyname Box1
       sheet_body 0
       nfaces 41
       nedges 0
       nmodelverts 0
       '<face>'
-         face_id 564
+         face_id 542
          ncofacets 1
          '<cofacet>'
             facet_id 1601
@@ -24,7 +24,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 560
+         face_id 538
          ncofacets 1
          '<cofacet>'
             facet_id 1602
@@ -32,7 +32,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 559
+         face_id 537
          ncofacets 1
          '<cofacet>'
             facet_id 1603
@@ -40,7 +40,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 562
+         face_id 540
          ncofacets 1
          '<cofacet>'
             facet_id 1604
@@ -48,7 +48,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 563
+         face_id 541
          ncofacets 1
          '<cofacet>'
             facet_id 1605
@@ -56,7 +56,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 535
+         face_id 513
          ncofacets 1
          '<cofacet>'
             facet_id 1606
@@ -64,7 +64,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 537
+         face_id 515
          ncofacets 1
          '<cofacet>'
             facet_id 1607
@@ -72,7 +72,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 316
+         face_id 294
          ncofacets 1
          '<cofacet>'
             facet_id 1608
@@ -80,7 +80,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 543
+         face_id 521
          ncofacets 1
          '<cofacet>'
             facet_id 1609
@@ -88,7 +88,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 544
+         face_id 522
          ncofacets 1
          '<cofacet>'
             facet_id 1610
@@ -96,7 +96,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 303
+         face_id 281
          ncofacets 1
          '<cofacet>'
             facet_id 1611
@@ -104,7 +104,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 304
+         face_id 282
          ncofacets 1
          '<cofacet>'
             facet_id 1612
@@ -112,7 +112,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 305
+         face_id 283
          ncofacets 1
          '<cofacet>'
             facet_id 1613
@@ -120,7 +120,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 306
+         face_id 284
          ncofacets 1
          '<cofacet>'
             facet_id 1614
@@ -128,7 +128,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 307
+         face_id 285
          ncofacets 1
          '<cofacet>'
             facet_id 1615
@@ -136,7 +136,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 308
+         face_id 286
          ncofacets 1
          '<cofacet>'
             facet_id 1616
@@ -144,7 +144,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 309
+         face_id 287
          ncofacets 1
          '<cofacet>'
             facet_id 1617
@@ -152,7 +152,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 311
+         face_id 289
          ncofacets 1
          '<cofacet>'
             facet_id 1618
@@ -160,7 +160,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 312
+         face_id 290
          ncofacets 1
          '<cofacet>'
             facet_id 1619
@@ -168,7 +168,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 313
+         face_id 291
          ncofacets 1
          '<cofacet>'
             facet_id 1620
@@ -176,7 +176,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 314
+         face_id 292
          ncofacets 1
          '<cofacet>'
             facet_id 1621
@@ -184,7 +184,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 315
+         face_id 293
          ncofacets 1
          '<cofacet>'
             facet_id 1622
@@ -192,7 +192,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 317
+         face_id 295
          ncofacets 1
          '<cofacet>'
             facet_id 1623
@@ -200,7 +200,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 318
+         face_id 296
          ncofacets 1
          '<cofacet>'
             facet_id 1624
@@ -208,7 +208,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 319
+         face_id 297
          ncofacets 1
          '<cofacet>'
             facet_id 1625
@@ -216,7 +216,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 320
+         face_id 298
          ncofacets 1
          '<cofacet>'
             facet_id 1626
@@ -224,7 +224,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 321
+         face_id 299
          ncofacets 1
          '<cofacet>'
             facet_id 1627
@@ -232,7 +232,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 322
+         face_id 300
          ncofacets 1
          '<cofacet>'
             facet_id 1628
@@ -240,7 +240,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 323
+         face_id 301
          ncofacets 1
          '<cofacet>'
             facet_id 1629
@@ -248,7 +248,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 324
+         face_id 302
          ncofacets 1
          '<cofacet>'
             facet_id 1630
@@ -256,7 +256,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 325
+         face_id 303
          ncofacets 1
          '<cofacet>'
             facet_id 1631
@@ -264,7 +264,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 326
+         face_id 304
          ncofacets 1
          '<cofacet>'
             facet_id 1632
@@ -272,7 +272,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 327
+         face_id 305
          ncofacets 1
          '<cofacet>'
             facet_id 1633
@@ -280,7 +280,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 328
+         face_id 306
          ncofacets 1
          '<cofacet>'
             facet_id 1634
@@ -288,7 +288,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 329
+         face_id 307
          ncofacets 1
          '<cofacet>'
             facet_id 1635
@@ -296,7 +296,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 330
+         face_id 308
          ncofacets 1
          '<cofacet>'
             facet_id 1636
@@ -304,7 +304,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 331
+         face_id 309
          ncofacets 1
          '<cofacet>'
             facet_id 1637
@@ -312,7 +312,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 332
+         face_id 310
          ncofacets 1
          '<cofacet>'
             facet_id 1638
@@ -320,7 +320,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 333
+         face_id 311
          ncofacets 1
          '<cofacet>'
             facet_id 1639
@@ -328,7 +328,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 334
+         face_id 312
          ncofacets 1
          '<cofacet>'
             facet_id 1640
@@ -336,7 +336,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 335
+         face_id 313
          ncofacets 1
          '<cofacet>'
             facet_id 1641
@@ -347,14 +347,14 @@
       '</vertices>'
    '</body>'
    '<body>'
-      bodyid 595
+      bodyid 573
       bodyname Chip
       sheet_body 0
       nfaces 6
       nedges 0
       nmodelverts 0
       '<face>'
-         face_id 596
+         face_id 574
          ncofacets 5
          '<cofacet>'
             facet_id 1603
@@ -378,7 +378,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 597
+         face_id 575
          ncofacets 2
          '<cofacet>'
             facet_id 1602
@@ -390,7 +390,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 598
+         face_id 576
          ncofacets 1
          '<cofacet>'
             facet_id 1647
@@ -398,7 +398,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 599
+         face_id 577
          ncofacets 2
          '<cofacet>'
             facet_id 1604
@@ -410,7 +410,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 600
+         face_id 578
          ncofacets 1
          '<cofacet>'
             facet_id 1605
@@ -418,7 +418,7 @@
          '</cofacet>'
       '</face>'
       '<face>'
-         face_id 601
+         face_id 579
          ncofacets 2
          '<cofacet>'
             facet_id 1601
@@ -433,14 +433,14 @@
       '</vertices>'
    '</body>'
    '<body>'
-      bodyid 623
+      bodyid 601
       bodyname Pad_1
       sheet_body 1
       nfaces 1
       nedges 0
       nmodelverts 0
       '<face>'
-         face_id 633
+         face_id 611
          ncofacets 1
          '<cofacet>'
             facet_id 1643
@@ -451,14 +451,14 @@
       '</vertices>'
    '</body>'
    '<body>'
-      bodyid 635
+      bodyid 613
       bodyname Pad_2
       sheet_body 1
       nfaces 1
       nedges 0
       nmodelverts 0
       '<face>'
-         face_id 645
+         face_id 623
          ncofacets 1
          '<cofacet>'
             facet_id 1644
@@ -469,14 +469,14 @@
       '</vertices>'
    '</body>'
    '<body>'
-      bodyid 647
+      bodyid 625
       bodyname jj
       sheet_body 1
       nfaces 1
       nedges 0
       nmodelverts 0
       '<face>'
-         face_id 657
+         face_id 635
          ncofacets 1
          '<cofacet>'
             facet_id 1645
@@ -489,199 +489,199 @@
    '<facet_face_map>'
       '<entry>'
          facet_id 1601
-         face_id 564
+         face_id 542
       '</entry>'
       '<entry>'
          facet_id 1602
-         face_id 560
+         face_id 538
       '</entry>'
       '<entry>'
          facet_id 1603
-         face_id 559
-      '</entry>'
-      '<entry>'
-         facet_id 1604
-         face_id 562
-      '</entry>'
-      '<entry>'
-         facet_id 1605
-         face_id 563
-      '</entry>'
-      '<entry>'
-         facet_id 1606
-         face_id 535
-      '</entry>'
-      '<entry>'
-         facet_id 1607
          face_id 537
       '</entry>'
       '<entry>'
+         facet_id 1604
+         face_id 540
+      '</entry>'
+      '<entry>'
+         facet_id 1605
+         face_id 541
+      '</entry>'
+      '<entry>'
+         facet_id 1606
+         face_id 513
+      '</entry>'
+      '<entry>'
+         facet_id 1607
+         face_id 515
+      '</entry>'
+      '<entry>'
          facet_id 1608
-         face_id 316
+         face_id 294
       '</entry>'
       '<entry>'
          facet_id 1609
-         face_id 543
+         face_id 521
       '</entry>'
       '<entry>'
          facet_id 1610
-         face_id 544
+         face_id 522
       '</entry>'
       '<entry>'
          facet_id 1611
-         face_id 303
+         face_id 281
       '</entry>'
       '<entry>'
          facet_id 1612
-         face_id 304
+         face_id 282
       '</entry>'
       '<entry>'
          facet_id 1613
-         face_id 305
+         face_id 283
       '</entry>'
       '<entry>'
          facet_id 1614
-         face_id 306
+         face_id 284
       '</entry>'
       '<entry>'
          facet_id 1615
-         face_id 307
+         face_id 285
       '</entry>'
       '<entry>'
          facet_id 1616
-         face_id 308
+         face_id 286
       '</entry>'
       '<entry>'
          facet_id 1617
-         face_id 309
+         face_id 287
       '</entry>'
       '<entry>'
          facet_id 1618
-         face_id 311
+         face_id 289
       '</entry>'
       '<entry>'
          facet_id 1619
-         face_id 312
+         face_id 290
       '</entry>'
       '<entry>'
          facet_id 1620
-         face_id 313
+         face_id 291
       '</entry>'
       '<entry>'
          facet_id 1621
-         face_id 314
+         face_id 292
       '</entry>'
       '<entry>'
          facet_id 1622
-         face_id 315
+         face_id 293
       '</entry>'
       '<entry>'
          facet_id 1623
-         face_id 317
+         face_id 295
       '</entry>'
       '<entry>'
          facet_id 1624
-         face_id 318
+         face_id 296
       '</entry>'
       '<entry>'
          facet_id 1625
-         face_id 319
+         face_id 297
       '</entry>'
       '<entry>'
          facet_id 1626
-         face_id 320
+         face_id 298
       '</entry>'
       '<entry>'
          facet_id 1627
-         face_id 321
+         face_id 299
       '</entry>'
       '<entry>'
          facet_id 1628
-         face_id 322
+         face_id 300
       '</entry>'
       '<entry>'
          facet_id 1629
-         face_id 323
+         face_id 301
       '</entry>'
       '<entry>'
          facet_id 1630
-         face_id 324
+         face_id 302
       '</entry>'
       '<entry>'
          facet_id 1631
-         face_id 325
+         face_id 303
       '</entry>'
       '<entry>'
          facet_id 1632
-         face_id 326
+         face_id 304
       '</entry>'
       '<entry>'
          facet_id 1633
-         face_id 327
+         face_id 305
       '</entry>'
       '<entry>'
          facet_id 1634
-         face_id 328
+         face_id 306
       '</entry>'
       '<entry>'
          facet_id 1635
-         face_id 329
+         face_id 307
       '</entry>'
       '<entry>'
          facet_id 1636
-         face_id 330
+         face_id 308
       '</entry>'
       '<entry>'
          facet_id 1637
-         face_id 331
+         face_id 309
       '</entry>'
       '<entry>'
          facet_id 1638
-         face_id 332
+         face_id 310
       '</entry>'
       '<entry>'
          facet_id 1639
-         face_id 333
+         face_id 311
       '</entry>'
       '<entry>'
          facet_id 1640
-         face_id 334
+         face_id 312
       '</entry>'
       '<entry>'
          facet_id 1641
-         face_id 335
+         face_id 313
       '</entry>'
       '<entry>'
          facet_id 1642
-         face_id 596
+         face_id 574
       '</entry>'
       '<entry>'
          facet_id 1643
-         face_id 633
+         face_id 611
       '</entry>'
       '<entry>'
          facet_id 1644
-         face_id 645
+         face_id 623
       '</entry>'
       '<entry>'
          facet_id 1645
-         face_id 657
+         face_id 635
       '</entry>'
       '<entry>'
          facet_id 1646
-         face_id 597
+         face_id 575
       '</entry>'
       '<entry>'
          facet_id 1647
-         face_id 598
+         face_id 576
       '</entry>'
       '<entry>'
          facet_id 1648
-         face_id 599
+         face_id 577
       '</entry>'
       '<entry>'
          facet_id 1649
-         face_id 601
+         face_id 579
       '</entry>'
    '</facet_face_map>'
 '</model>'

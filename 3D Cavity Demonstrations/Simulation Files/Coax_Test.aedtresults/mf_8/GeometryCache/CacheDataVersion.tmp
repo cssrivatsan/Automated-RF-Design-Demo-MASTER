@@ -1,0 +1,7 @@
+$begin 'CacheDataVersion'
+	DataVersion=1
+$end 'CacheDataVersion'
+$begin 'VariableValues'
+	Stock_H='2in'
+	Cyl_R='0.5in'
+$end 'VariableValues'

@@ -1,0 +1,79 @@
+$begin '$base_index$'
+  $begin 'properties'
+    all_levels=000000000000
+    time(year=000000002021, month=000000000006, day=000000000017, hour=000000000000, min=000000000039, sec=000000000042)
+    version=000000000000
+  $end 'properties'
+  $begin '$base_index$'
+    $index$(pos=000000001680, lin=000000000059, lvl=000000000000)
+  $end '$base_index$'
+$end '$base_index$'
+$begin 'SolutionBlock1'
+	SolutionName='LastAdaptive'
+	SolutionID=17
+	V=0
+	$begin 'States'
+	$end 'States'
+	$begin 'Definition'
+		SamplingInterpolation=false
+		Frequencies(5000000000)
+		SolutionType=6
+		CenterFreq=0
+	$end 'Definition'
+	SweepID=-1
+$end 'SolutionBlock1'
+$begin 'BlockMapName'
+	FileHeader='SolutionBlock4'
+	'SolutionKey(SimSetup=16, Instance=\'SetupDefinition\', Solution=-1, VersionID=0)'='SolutionBlock3'
+	'SolutionKey(SimSetup=16, Instance=\'SolutionDefinition\', Solution=17, VersionID=0)'='SolutionBlock1'
+	'SolutionKey(SimSetup=16, Instance=\'SolutionDefinition\', Solution=18, VersionID=0)'='SolutionBlock2'
+$end 'BlockMapName'
+$begin 'SolutionBlock2'
+	SolutionName='AdaptivePass'
+	SolutionID=18
+	V=0
+	$begin 'States'
+	$end 'States'
+	$begin 'Definition'
+		SamplingInterpolation=false
+		Frequencies(5000000000)
+		SolutionType=6
+		CenterFreq=0
+	$end 'Definition'
+	SweepID=-1
+$end 'SolutionBlock2'
+$begin 'SolutionBlock3'
+	SimSetupID=16
+	SimSetupName='Ec_Test'
+	VersionID=0
+	SolveSetupID=0
+	$begin 'SU'
+	$end 'SU'
+	$begin 'SU'
+	$end 'SU'
+	$begin 'SU'
+	$end 'SU'
+	$begin 'MI'
+	$end 'MI'
+$end 'SolutionBlock3'
+$begin 'SolutionBlock4'
+	ProductName=''
+	CircuitName='Coax_Q3D'
+	VersionID=9
+	PostProcess=false
+	LossLess=true
+	NextUniqueID=58
+	MoveBackwards=false
+	VersionID2=14
+$end 'SolutionBlock4'
+$begin '$index$'
+	$begin '$index$'
+		SolutionBlock4(pos=1494, lin=49, lvl=0)
+		SolutionBlock1(pos=370, lin=1, lvl=0)
+		BlockMapName(pos=637, lin=15, lvl=0)
+		SolutionBlock2(pos=1017, lin=21, lvl=0)
+		SolutionBlock3(pos=1284, lin=35, lvl=0)
+		$base_index$(pos=0, lin=1, lvl=0)
+		$index$(pos=1680, lin=59, lvl=0)
+	$end '$index$'
+$end '$index$'

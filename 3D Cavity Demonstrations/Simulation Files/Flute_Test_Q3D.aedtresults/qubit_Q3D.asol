@@ -1,7 +1,7 @@
 $begin '$base_index$'
   $begin 'properties'
     all_levels=000000000000
-    time(year=000000002021, month=000000000003, day=000000000026, hour=000000000013, min=000000000047, sec=000000000011)
+    time(year=000000002021, month=000000000006, day=000000000019, hour=000000000015, min=000000000018, sec=000000000014)
     version=000000000000
   $end 'properties'
   $begin '$base_index$'
@@ -206,12 +206,12 @@ $begin 'SolutionBlock5'
 		ConvTarget='1'
 		ConvTargetConsecPasses='N/A'
 		ConvCurrentConsecPasses='N/A'
-		c(tri=44, p=1)
-		c(delta=14.6068, tri=90, p=2)
-		c(delta=5.96989, tri=278, p=3)
-		c(delta=4.50691, tri=794, p=4)
-		c(delta=1.06934, tri=1786, p=5)
-		c(delta=0.271967, tri=2216, p=6)
+		c(p=1, tri=44)
+		c(p=2, tri=90, delta=14.6068)
+		c(p=3, tri=278, delta=5.96989)
+		c(p=4, tri=794, delta=4.50691)
+		c(p=5, tri=1786, delta=1.06934)
+		c(p=6, tri=2216, delta=0.271967)
 	$end '56001'
 $end 'SolutionBlock5'
 $begin '$index$'
